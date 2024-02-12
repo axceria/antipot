@@ -1,9 +1,5 @@
-[![Active Development](https://img.shields.io/badge/Maintenance%20Level-Actively%20Developed-brightgreen.svg)](https://gist.github.com/cheerfulstoic/d107229326a01ff0f333a1d3476e068d)
 
-# honeydet Go Honeypot Detector
-![image](https://github.com/referefref/honeydet/assets/56499429/563eacf3-8b3b-42d5-962a-bfc2e42f420f)
-
-### What does honeydet do?
+### Functions
 
 honeydet is a signature based, multi-step, high interaction, multi-threaded honeypot detection tool written in Golang.
 It can detect honeypots based upon the premise that, given a set of specifically crafted requests they will generate a unique and identifying response.
@@ -15,7 +11,7 @@ Shodan API integration for non-private IPs, automatically adds shodan host infor
 ### Signatures
 The signature list is growing as I run through different methods of fuzzing, reverse engineering and comparing real protocols and servers to their emulated counterparts. I continue to add features to the signature format as required, and will extend the applications support of protocols using additional libraries as needed for things like DICOM and Modbus.
 
-### Frontend Features:
+### Features:
 - Multi-threaded, and now super fast. /24 single port scan in around 1 second
 - Supports single and multiple targets with csv, range, and CIDR
 - Supports single and multiple ports with range and csv list
@@ -23,8 +19,7 @@ The signature list is growing as I run through different methods of fuzzing, rev
 - Pagination, table search and export
 - Remove individual scans and clear database functionality
 
-### Wish-list/To-do
-* ~~Docker image and docker-compose file for simple installation~~
+### Not Implemented
 * SSL
 * JA4+, HASSH, and other fingerprinting support
 * Add shodan flag to frontend
@@ -38,8 +33,12 @@ The signature list is growing as I run through different methods of fuzzing, rev
 
 #### Build from source
 ```
-git clone https://github.com/referefref/honeydet.git
-cd honeydet
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.22.0.linux-amd64.tar.gz
+echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
+source ~/.profile
+go version
+git clone https://github.com/axceria/antipot.git
+cd antipot
 go get honeydet
 go build
 ```
@@ -53,72 +52,27 @@ docker compose up
 
 ### Command line options
 ```
-  -H string
-    	Short form of -hostfile
-  -P string
-    	Short form of -proto (default "tcp")
-  -T int
-    	Short form of -timeout (default 5)
-  -b	Short form of -bypassPortCheck
-  -bypassPortCheck
-    	Bypass port match checking and run all signatures against all ports
-  -c	Short form of -checkPing
-  -checkPing
-    	Check if the host responds to ping before scanning
-  -d int
-    	Short form of -delay
-  -debug
-    	Enable extra verbose (debug) output
-  -delay int
-    	Delay in milliseconds between requests to a single host
-  -h string
-    	Short form of -host
-  -host string
-    	Single host or range of hosts to scan (i.e. 1.1.1.1, 10.1.1.1/24, 1.2.37.10.20-1.2.37.10.30)
-  -hostfile string
-    	File containing a list of hosts to scan
-  -o string
-    	Short form of -output
-  -output string
-    	Output file for the report (default is stdout)
-  -p string
-    	Short form of -port (default "22")
-  -password string
-    	Password for authentication
-  -port string
-    	Target port(s) to scan, single (22), range (22-80), or list (22,80,443) (default "22")
-  -proto string
-    	Protocol (tcp or udp) (default "tcp")
-  -pw string
-    	Short form of -password
-  -r string
-    	Short form of -report (default "none")
-  -report string
-    	Type of report to generate (none, json, csv) (default "none")
-  -s string
-    	Short form of -signatures (default "signatures.yaml")
-  -shodan
-    	Enable Shodan API enrichment
-  -signatures string
-    	File with signatures (default "signatures.yaml")
-  -t int
-    	Short form of -threads (default 1)
-  -threads int
-    	Number of concurrent threads (default 1)
-  -timeout int
-    	Connection timeout in seconds (default 5)
-  -u string
-    	Short form of -username
-  -username string
-    	Username for authentication
-  -v	Short form of -verbose
-  -verbose
-    	Enable verbose output
-  -vv
-    	Enable extra verbose (debug) output
-  -w	Short form of -webserver
-  -webserver
-    	Run as a web server on port 8080
+  -H / -hostfile File containing a list of hosts to scan
+  -P / -proto Protocol (tcp or udp) (default "tcp")
+  -T / -timeout (default 5)
+  -b / -bypassPortCheck Bypass port match checking and run all signatures against all ports
+  -c / -checkPing Check if the host responds to ping before scanning
+  -d / -delay Delay in milliseconds between requests to a single host
+  -debug Enable extra verbose (debug) output
+  -h / -host Single host or range of hosts to scan (i.e. 1.1.1.1, 10.1.1.1/24, 1.2.37.10.20-1.2.37.10.30)
+  -o / -output Output file for the report (default is stdout)
+  -p / -port Target port(s) to scan, single (22), range (22-80), or list (22,80,443) (default "22")
+  -pw / -password Password for authentication
+  -r / -report Type of report to generate (none, json, csv) (default "none")    	
+  -s / -signatures File with signatures (default "signatures.yaml")
+  -t / -threads Number of concurrent threads (default 1)    	
+  -shodan Enable Shodan API enrichment
+  -timeout Connection timeout in seconds (default 5)
+  -u / -username Username for authentication
+  -v / -verbose Enable verbose output
+  -vv Enable extra verbose (debug) output    	
+  -w / -webserver Run as a web server on port 8080
+    	
 ```
 ### Examples
 * Scan a single host on port 2822 in verbose mode:
@@ -140,8 +94,6 @@ curl 'http://localhost:8080/scan?targets=10.1.1.1/24&report=json&port=3389'
 ```
 
 ## How to write a signature
-Any contibutions to the signatures and detection logic are welcomed and will be integrated with proof, just submit the yaml as a PR.
-Unique signature id's will be allocated upon collation of submitted signatures. If there's enough interest, i'll add author and reference url fields to the signature.
 
 Add a new section to signatures.yaml or create a new signature yaml file with the following format
 ```
